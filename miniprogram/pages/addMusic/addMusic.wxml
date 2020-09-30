@@ -1,0 +1,11 @@
+<view style="display:flex;">
+	<text>歌曲名</text><input bindinput="changMusicName" value="{{musicName}}" style="padding-left:30rpx" placeholder="请输入歌曲名"/>
+</view>
+<view style="display:flex;">
+	<text>歌手名</text><input bindinput="changSingerName" value="{{singerName}}" style="padding-left:30rpx" placeholder="请输入歌手名"/>
+</view>
+<view style="display:flex;justify-content: space-around;">
+	<button size="mini" type="default" bindtap="addCoverImg">添加歌曲封面</button>
+	<button size="mini" type="default" bindtap="addMusic">添加歌曲</button>
+</view>
+	<button size="mini" type="default" bindtap="onSave">确认</button>

@@ -1,0 +1,27 @@
+<!--miniprogram/pages/musicPlayer/musicPlayer.wxml-->
+<view class="container">
+	<view class="music-info">
+		{{currentMusic.singerName}}-{{currentMusic.musicName}}
+	</view>
+	<view  style="width:750rpx;height:700rpx;justify-content: center;align-items: center;display:flex">
+		<image bindanimationstart="startAnimation" animation="{{animation}}" style="width:500rpx;height:500rpx;border-radius:50%" src="{{currentMusic.imgUrl?currentMusic.imgUrl:'../../images/default.jpg'}}"></image>
+	</view>
+	<!-- <view style="width:750rpx;height:60rpx;justify-content: flex-start;align-items: center;display:flex">
+		<slider bindchange="slider1change" left-icon="cancel" right-icon="success_no_circle" min="0" max="{{duration}}" value="{{currentTime}}" />
+		<view>{{duration}}</view>
+	</view> -->
+	<view class="play-content">
+		<!-- <view class="iconfont background_suspend"></view> -->
+		<view class="btn-content">
+			<view class="play-btn" bindtap="playPrev" data-index="{{currentIndex}}">
+				<view class="iconfont blackground_black"></view>
+			</view>
+			<view class="play-btn" bindtap="togglePlay">
+				<view class='{{isPlay?"iconfont background_suspend":"iconfont blackground_play"}}'></view>
+			</view>
+			<view class="play-btn" bindtap="playNext" data-index="{{currentIndex}}">
+				<view class="iconfont blackground_forward"></view>
+			</view>
+		</view>
+	</view>
+</view>

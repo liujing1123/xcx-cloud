@@ -1,0 +1,5 @@
+/* miniprogram/pages/addMusic/addMusic.wxss */
+page{
+  justify-content: space-around;
+  align-items: center;
+}

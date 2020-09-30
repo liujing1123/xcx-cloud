@@ -1,0 +1,14 @@
+/* miniprogram/pages/addPic/addPage.wxss */
+page{
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+.pic-name{
+  display: flex;
+  flex-direction: row;
+}
+
+.weui-input{
+  flex:1;
+}

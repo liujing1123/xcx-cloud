@@ -1,0 +1,15 @@
+<!--miniprogram/pages/addPic/addPage.wxml-->
+<view>
+	<view class="pic-name">
+		<view style="width:200rpx">图片名称</view>
+		<input bindinput="changPicName" class="weui-input" value="{{pic_name}}" auto-focus placeholder="请输入图片名称" />
+	</view>
+	<button size="mini" type="default" bindtap="doUpload">上传图片</button>
+	<!-- <button size="mini" type="default" bindtap="onAdd">新增记录</button> -->
+</view>
+<view wx:for="{{picList}}" wx:key="_id">
+	<image src="{{item.pic_url}}" />
+	<view>{{item.pic_name}}
+		<button size="mini" type="warn" bindtap="onDel" data-id="{{item._id}}">删除</button>
+	</view>
+</view>
