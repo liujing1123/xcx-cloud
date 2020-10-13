@@ -7,7 +7,10 @@ Page({
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    person1:{name:'小王'},
+    person2:{name:'小李'},
+    openid:""
   },
 
   onLoad: function() {
@@ -54,15 +57,18 @@ Page({
       success: res => {
         console.log('[云函数] [login] user openid: ', res.result.openid)
         app.globalData.openid = res.result.openid
-        wx.navigateTo({
-          url: '../userConsole/userConsole',
-        })
+        // wx.navigateTo({
+        //   url: '../userConsole/userConsole',
+        // })
+        console.log(res.result.openid);
+        
+        this.setData({openid:res.result.openid})
       },
       fail: err => {
         console.error('[云函数] [login] 调用失败', err)
-        wx.navigateTo({
-          url: '../deployFunctions/deployFunctions',
-        })
+        // wx.navigateTo({
+        //   url: '../deployFunctions/deployFunctions',
+        // })
       }
     })
   },
@@ -124,5 +130,8 @@ Page({
       },
       fail: console.error
     })
-  }
+  },
+onLoad: function (options) {
+  this.onGetOpenid()
+},
 })

@@ -143,9 +143,9 @@ Page({
 
   onSave: function () {
     let {imgUrl,musicUrl,musicName,singerName} = this.data
-    if(!imgUrl||!musicUrl){
+    if(!musicUrl){
       wx.showToast({
-        title: '封面图片或歌曲未上传',
+        title: '歌曲未上传',
         icon:"none",
       })
       return

@@ -9,30 +9,33 @@ page {
   height: calc(100%);
   display: flex;
   flex-direction: column;
+  background-color: #141A2C;
+  position: relative;
 }
 
 .music-name {
   width: 100%;
   justify-content: center;
   align-items: center;
-
 }
 
 .music-info {
   width: 100%;
   display: flex;
   justify-content: center;
-  height: 60rpx;
+  height: 80rpx;
   align-items: center;
-  line-height: 60rpx;
+  line-height: 80rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #fff;
 }
 
 .play-content {
   width: 100%;
-  flex: 1;
+  /* flex: 1; */
+  height: 200rpx;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -40,7 +43,6 @@ page {
 
 .btn-content {
   width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -52,4 +54,93 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.positon-content {
+  width: calc(100% - 100rpx);
+  display: flex;
+  height: 80rpx;
+  justify-content: center;
+  align-items: center;
+  padding-left: 30rpx;
+  padding-right: 20rpx;
+}
+
+.circle {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 600rpx;
+  height: 600rpx;
+  position: relative;
+}
+
+.cover {
+  width: 400rpx;
+  height: 400rpx;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-dialog {
+  width: 700rpx;
+  overflow: hidden;
+  position: fixed;
+  bottom: 20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: #f9f9f9;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 950rpx;
+  min-height: 400rpx;
+  overflow: hidden;
+}
+
+.modal-title {
+  width: 100%;
+  height: 100rpx;
+  text-align: center;
+  line-height: 100rpx;
+  font-size: 40rpx;
+  font-weight: 600;
+  border-bottom: 1px solid #ccc;
+}
+
+.music-item {
+  display: flex;
+  height: 100rpx;
+  line-height: 100rpx;
+  justify-content: flex-start;
+  border-bottom: 1px solid #ccc;
+  padding-left: 40rpx;
+}
+
+.music-content {
+  flex: 1;
+  overflow: auto;
+}
+
+.icon-play-list,
+.icon-song-list,
+.icon-single,
+.icon-random,
+.icon-order {
+  font-size: 46rpx;
+}
+
+.icon-blackground_black,
+.icon-background_suspend,
+.icon-blackground_play,
+.icon-blackground_forward,
+.icon-song-list,
+.icon-single,
+.icon-random,
+.icon-order {
+  color: #f7f7f7;
 }

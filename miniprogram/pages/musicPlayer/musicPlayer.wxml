@@ -1,27 +1,76 @@
 <!--miniprogram/pages/musicPlayer/musicPlayer.wxml-->
+<wxs module="m1">
+	var getTimeShow = function(time) {
+		var sec = parseInt(time / 1000);
+		var min = parseInt(sec / 60);
+		sec = sec - min * 60;
+		var ret = min + ":";
+		if (sec < 10) {
+			ret += "0";
+		}
+		ret += sec;
+		return ret;
+	}
+	module.exports.getTimeShow = getTimeShow;
+</wxs>
 <view class="container">
-	<view class="music-info">
-		{{currentMusic.singerName}}-{{currentMusic.musicName}}
-	</view>
-	<view  style="width:750rpx;height:700rpx;justify-content: center;align-items: center;display:flex">
-		<image bindanimationstart="startAnimation" animation="{{animation}}" style="width:500rpx;height:500rpx;border-radius:50%" src="{{currentMusic.imgUrl?currentMusic.imgUrl:'../../images/default.jpg'}}"></image>
-	</view>
-	<!-- <view style="width:750rpx;height:60rpx;justify-content: flex-start;align-items: center;display:flex">
-		<slider bindchange="slider1change" left-icon="cancel" right-icon="success_no_circle" min="0" max="{{duration}}" value="{{currentTime}}" />
-		<view>{{duration}}</view>
+	<!-- <view style="position:absolute;top:0;left:145rpx;z-index:99">
+		<image style="width:350rpx;height:350rpx;border-radius:50%" src="../../images/playhandle.png"></image>
 	</view> -->
+	<view class="music-info">
+		{{currentMusic.musicName}}
+	</view>
+	<view class="music-info">
+		{{currentMusic.singerName}}
+	</view>
+	<view style="flex:1;width:750rpx;justify-content: center;align-items: center;display:flex">
+		<view class="circle" animation="{{animation}}">
+			<image style="width:600rpx;height:600rpx;border-radius:50%" src="../../images/circle.png"></image>
+			<view class="cover">
+				<image style="width:400rpx;height:400rpx;border-radius:50%" src="{{currentMusic.imgUrl?currentMusic.imgUrl:'../../images/default.jpg'}}"></image>
+			</view>
+		</view>
+	</view>
+
+	<view class="positon-content">
+		<view style="color:#fff;font-size:28rpx">{{currentTime}}</view>
+		<view style="flex:1">
+			<slider block-size="24" min="0" max="{{totalTime}}" value="{{nowTime}}" bindchange="sliderChange" left-icon="cancel" right-icon="success_no_circle" activeColor="#818BA7" />
+		</view>
+		<view style="color:#f1f1f1;font-size:28rpx">{{duration}}</view>
+	</view>
+
 	<view class="play-content">
-		<!-- <view class="iconfont background_suspend"></view> -->
 		<view class="btn-content">
-			<view class="play-btn" bindtap="playPrev" data-index="{{currentIndex}}">
-				<view class="iconfont blackground_black"></view>
+
+			<view class="play-btn">
+				<view bindtap="changePlayMode" class="{{playMode==0?'iconfont icon-order':playMode==1?'iconfont icon-random':'iconfont icon-single'}}"></view>
+			</view>
+			<view class="play-btn" bindtap="prev" data-index="{{currentIndex}}">
+				<view class="iconfont icon-blackground_black"></view>
 			</view>
 			<view class="play-btn" bindtap="togglePlay">
-				<view class='{{isPlay?"iconfont background_suspend":"iconfont blackground_play"}}'></view>
+				<view class='{{isPlay?"iconfont icon-background_suspend":"iconfont icon-blackground_play"}}'></view>
 			</view>
-			<view class="play-btn" bindtap="playNext" data-index="{{currentIndex}}">
-				<view class="iconfont blackground_forward"></view>
+			<view class="play-btn" bindtap="next" data-index="{{currentIndex}}">
+				<view class="iconfont icon-blackground_forward"></view>
+			</view>
+			<view class="play-btn" bindtap="getSongList">
+				<view class="iconfont icon-song-list"></view>
 			</view>
 		</view>
 	</view>
 </view>
+<view class="modal-dialog" wx:if="{{showModal}}">
+	<view class="modal-title">播放列表</view>
+	<view class="music-content">
+		<view wx:for="{{musicList}}" wx:key="index">
+			<view class="music-item" bindtap="playByIndex" data-index="{{index}}">
+				<view wx:if="{{index==currentIndex}}" class="iconfont icon-play-list" style="margin-right:20rpx"></view>
+				<view>{{item.musicName}}-</view>
+				<view style="font-size:30rpx">{{item.singerName}}</view>
+			</view>
+		</view>
+	</view>
+</view>
+<view class="modal-mask" bindtap="hideModal" catchtouchmove="true" wx:if="{{showModal}}"></view>

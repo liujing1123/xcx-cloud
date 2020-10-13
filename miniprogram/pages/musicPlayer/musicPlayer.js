@@ -11,9 +11,29 @@ Page({
     currentMusic: {},
     currentIndex: 0,
     isPlay: false,
-    duration: 0,
-    currentTime: 0,
-    rotateDeg: 0
+    duration: "0:00",
+    currentTime: "0:00",
+    rotateDeg: 0,
+    nowTime: 0,
+    playMode: 0, //0:顺序播放,1:随机播放,2：单曲循环
+  },
+
+  changePlayMode: function () {
+    let playMode = this.data.playMode
+    switch (playMode) {
+      case 0:
+        playMode = 1;
+        break;
+      case 1:
+        playMode = 2;
+        break;
+      case 2:
+        playMode = 0;
+        break;
+    }
+    this.setData({
+      playMode
+    })
   },
 
   getMusicList: function () {
@@ -46,55 +66,85 @@ Page({
     })
   },
 
-  formatDuring: function (mss) {
-    second = Math.ceil(mss);
-    var minute = 0;
-    var hour = 0;
-    if (second > 0) {
-      minute = parseInt(second / 60);
-      second = parseInt(second % 60);
-      if (minute > 60) {
-        hour = parseInt(minute / 60);
-        minute = parseInt(minute % 60);
-      }
+  getTimeShow: function (time) {
+    var sec = parseInt(time / 1000);
+    var min = parseInt(sec / 60);
+    sec = sec - min * 60;
+    var ret = min + ":";
+    if (sec < 10) {
+      ret += "0";
     }
-    var time = '';
-    if (minute == 0) {
-      time += "00:" + parseInt(second);
-    } else {
-      time += parseInt(second);
-    }
-    if (minute != 0) {
-      if (minute > 9) {
-        if (time == 0) {
-          time = parseInt(minute) + ":" + time + '0';
-        } else {
-          time = parseInt(minute) + ":" + time;
-        }
-      } else {
-        time = "0" + parseInt(minute) + ":" + time;
-      }
-    }
-    if (hour > 0) {
-      time = parseInt(hour) + ":" + time;
-    }
-    return time;
+    ret += sec;
+    return ret;
   },
 
-  playPrev: function (e) {
+  sliderChange: function (e) {
+    console.log('slider1chang', e);
+    myaudio.seek(e.detail.value)
+    this.setData({
+      nowTime: e.detail.value
+    })
+  },
+
+  playByIndex: function name(e) {
+    let currentIndex = e.currentTarget.dataset.index
+    this.playMusic(currentIndex)
+  },
+
+  playMusic: function (currentIndex) {
     this.animation = wx.createAnimation({
-      duration: 100
+      duration: 10
     })
     this.animation.rotate(0).step()
-    // this.data.animation = this.animation.export()
     this.setData({
-      animation: this.animation.export()
+      animation: this.animation.export(),
+      showModal: false
     })
     setTimeout(() => {
       if (myaudio.src) {
         myaudio.stop()
       }
-      let prevIndex = e.currentTarget.dataset.index
+      let {
+        musicList,
+      } = this.data
+      let currentMusic = musicList[currentIndex]
+      myaudio.src = musicList[currentIndex].musicUrl
+      this.animation = wx.createAnimation({
+        duration: 300000
+      })
+      this.animation.rotate(2150).step()
+      if (myaudio.src) {
+        myaudio.play()
+        this.setData({
+          animation: this.animation.export(),
+        })
+      }
+      this.setData({
+        currentMusic,
+        currentIndex,
+        isPlay: true
+      })
+    }, 200)
+  },
+
+  prev: function (e) {
+    this.playPrev(e.currentTarget.dataset.index)
+  },
+
+  playPrev: function (prevIndex) {
+    this.animation = wx.createAnimation({
+      duration: 10
+    })
+    this.animation.rotate(0).step()
+    // this.data.animation = this.animation.export()
+    this.setData({
+      animation: this.animation.export(),
+      duration: this.getTimeShow(myaudio.duration * 1000),
+    })
+    setTimeout(() => {
+      if (myaudio.src) {
+        myaudio.stop()
+      }
       let {
         musicList,
         currentIndex,
@@ -114,14 +164,13 @@ Page({
       currentMusic = musicList[currentIndex]
       myaudio.src = musicList[currentIndex].musicUrl
       this.animation = wx.createAnimation({
-        duration: 50400
+        duration: 300000
       })
-      this.animation.rotate(360).step()
+      this.animation.rotate(2150).step()
       if (myaudio.src) {
         myaudio.play()
         this.setData({
           animation: this.animation.export(),
-          duration: myaudio.duration
         })
       }
       this.setData({
@@ -137,41 +186,46 @@ Page({
     if (this.data.isPlay) {
       myaudio.pause();
       this.animation = wx.createAnimation({
-        duration: 1000
+        duration: 10
       })
       this.animation.rotate(0).step()
       this.setData({
-        animation: this.animation.export()
+        animation: this.animation.export(),
       })
     } else {
       myaudio.play();
       this.animation = wx.createAnimation({
-        duration: 50400
+        duration: 300000
       })
-      this.animation.rotate(360).step()
+      this.animation.rotate(2150).step()
       this.setData({
         animation: this.animation.export()
       })
     }
     this.setData({
-      isPlay: !this.data.isPlay
+      isPlay: !this.data.isPlay,
+      duration: this.getTimeShow(myaudio.duration * 1000),
     })
   },
 
-  playNext: function (e) {
+  next: function (e) {
+    this.playNext(e.currentTarget.dataset.index)
+  },
+
+  playNext: function (prevIndex) {
     this.animation = wx.createAnimation({
-      duration: 100
+      duration: 10
     })
     this.animation.rotate(0).step()
     // this.data.animation = this.animation.export()
     this.setData({
-      animation: this.animation.export()
+      animation: this.animation.export(),
+      duration: this.getTimeShow(myaudio.duration * 1000),
     })
     setTimeout(() => {
       if (myaudio.src) {
         myaudio.stop()
       }
-      let prevIndex = e.currentTarget.dataset.index
       let {
         musicList,
         currentIndex,
@@ -192,14 +246,13 @@ Page({
       currentMusic = musicList[currentIndex]
       myaudio.src = musicList[currentIndex].musicUrl
       this.animation = wx.createAnimation({
-        duration: 50400
+        duration: 300000
       })
-      this.animation.rotate(360).step()
+      this.animation.rotate(2150).step()
       if (myaudio.src) {
         myaudio.play()
         this.setData({
           animation: this.animation.export(),
-          duration: myaudio.duration
         })
       }
       this.setData({
@@ -210,10 +263,19 @@ Page({
     }, 200)
 
   },
-  startAnimation:function(){
-    console.log('startAnimation');
-    
+
+  getSongList: function () {
+    this.setData({
+      showModal: true
+    })
   },
+
+  hideModal: function () {
+    this.setData({
+      showModal: false
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -226,6 +288,11 @@ Page({
    */
   onReady: function () {
     let that = this
+    //旋转动画
+    that.animation = wx.createAnimation({
+      duration: 300000,
+    })
+
     myaudio.onCanplay(() => {
       // 必须。可以当做是初始化时长
       myaudio.duration;
@@ -233,32 +300,65 @@ Page({
       setTimeout(() => {
         console.log('myaudio.currentTime', myaudio.currentTime, myaudio.duration);
         that.setData({
-          duration: myaudio.duration,
-          currentTime: myaudio.currentTime
+          duration: this.getTimeShow(myaudio.duration * 1000 || 0),
+          totalTime: myaudio.duration,
         })
       }, 1000)
     })
 
-    // onStop
-    that.animation = wx.createAnimation({ duration: 50400,})
+    // 播放更新
+    myaudio.onTimeUpdate(() => {
+      this.setData({
+        currentTime: this.getTimeShow(myaudio.currentTime * 1000),
+        nowTime: myaudio.currentTime
+      })
+    })
 
-    // let deg = 0
-    // that.interval = setInterval(() => {
-    //   deg = deg + 1
-    // }, 139);
-    
-    // myaudio.onPlay(() => {
-    //         if (deg == 360) {
-    //     deg = 0
-    //   }
-    //   if (deg == 0) {
-    //     that.interval()
-    //     that.animation.rotate(360).step()
-    //     that.setData({
-    //       animation: that.animation.export(),
-    //     })
-    //   }
-    // })
+    //播放结束
+    myaudio.onEnded(() => {
+      // playMode:0,//0:顺序播放,1:随机播放,2：单曲循环
+      let {
+        currentIndex,
+        musicList,
+        playMode
+      } = that.data
+      
+      that.setData({
+        isPlay: false,
+        nowTime:0
+      },()=>{
+        if (playMode == 0) {
+          if (currentIndex == musicList.length - 1) {
+            that.playMusic(0)
+          } else {
+            that.playNext(that.data.currentIndex)
+          }
+        } else if (playMode == 1) {
+          let index = Math.floor(Math.random() * (musicList.length - 1))
+          that.playMusic(index)
+        } else {
+          that.playMusic(currentIndex)
+        }
+      })
+     
+    })
+
+    //进度条拖动结束
+    myaudio.onSeeked(() => {
+      myaudio.play();
+      this.animation = wx.createAnimation({
+        duration: 300000
+      })
+      this.animation.rotate(2150).step()
+      this.setData({
+        isPlay: true,
+        animation: this.animation.export()
+      })
+    })
+
+    myaudio.onPlay(() => {
+
+    })
 
     // myaudio.onPause(() => {
     //   deg = 0

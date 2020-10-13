@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {},
+  "navigationBarTitleText": "网愈云音乐",
+  "navigationBarBackgroundColor": "#141A2C",
+  "navigationBarTextStyle": "white"
 }

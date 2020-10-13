@@ -15,7 +15,8 @@
     "pages/im/room/room",
     "pages/addPic/addPage",
     "pages/addMusic/addMusic",
-    "pages/musicPlayer/musicPlayer"
+    "pages/musicPlayer/musicPlayer",
+    "pages/photography/photography"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -24,6 +25,27 @@
     "navigationBarTitleText": "云开发 QuickStart",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "style": "v2",
+  "tabBar": {
+    "color": "#green",
+    "selectedColor": "#ffffff",
+    "borderStyle": "black",
+    "backgroundColor": "#141A2C",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/musicPlayer/musicPlayer",
+        "text": "我的音乐"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示" 
+    }
+  },
+  "sitemapLocation": "sitemap.json"
 }
